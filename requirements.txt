@@ -1,0 +1,2 @@
+# Installing the project without third-party runtime dependencies.
+-e .

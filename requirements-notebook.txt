@@ -1,0 +1,2 @@
+# Installing the notebook interface and project together.
+-e .[notebook]

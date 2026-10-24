@@ -1,0 +1,4 @@
+# Keeping every gate because there are no adjacent inverse pairs.
+H 0
+CX 0 1
+T 1

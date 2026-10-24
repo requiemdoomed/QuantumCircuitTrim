@@ -1,0 +1,70 @@
+{
+  "project": "CircuitTrim",
+  "version": "1.0.0",
+  "author": "Swayam Shakya",
+  "qubits": 2,
+  "original": "H 0\nX 1\nX 1\nS 0\nSDG 0\nH 0\nH 0\nCX 0 1\nZ 1\nZ 1\nT 0\nTDG 0",
+  "simplified": "H 0\nCX 0 1",
+  "gates_before": 12,
+  "gates_after": 2,
+  "removed": 10,
+  "reduction_percent": 83.33333333333333,
+  "verification": {
+    "equivalent": true,
+    "max_error": 1.1102230246251565e-16,
+    "inputs_checked": 4,
+    "tolerance": 1e-09
+  },
+  "cancellations": [
+    {
+      "positions": [
+        2,
+        3
+      ],
+      "reason": "X 1 + X 1 = identity"
+    },
+    {
+      "positions": [
+        4,
+        5
+      ],
+      "reason": "S 0 + SDG 0 = identity"
+    },
+    {
+      "positions": [
+        1,
+        6
+      ],
+      "reason": "H 0 + H 0 = identity"
+    },
+    {
+      "positions": [
+        9,
+        10
+      ],
+      "reason": "Z 1 + Z 1 = identity"
+    },
+    {
+      "positions": [
+        11,
+        12
+      ],
+      "reason": "T 0 + TDG 0 = identity"
+    }
+  ],
+  "probabilities_from_zero": {
+    "original": {
+      "00": 0.4999999999999998,
+      "01": 0.0,
+      "10": 0.0,
+      "11": 0.4999999999999998
+    },
+    "simplified": {
+      "00": 0.4999999999999999,
+      "01": 0.0,
+      "10": 0.0,
+      "11": 0.4999999999999999
+    }
+  },
+  "bit_order": "q(n-1)...q0; q0 is the least significant bit"
+}

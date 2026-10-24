@@ -1,0 +1,13 @@
+# Keeping the Bell-state preparation while removing redundant pairs.
+H 0
+X 1
+X 1
+S 0
+SDG 0
+H 0
+H 0
+CX 0 1
+Z 1
+Z 1
+T 0
+TDG 0
