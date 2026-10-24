@@ -1,14 +1,12 @@
-# CircuitTrim
+# QuantumCircuitTrim
 
 **Simplify small quantum circuits. Check that their operations stay the same.**
 
 By **Swayam Shakya** · Python 3.10+ · MIT License
 
-CircuitTrim removes adjacent inverse gates, draws the before-and-after circuits, and verifies the complete circuit operation. It is a compact quantum computing project with a command-line tool and an interactive Jupyter notebook.
+QuantumCircuitTrim removes adjacent inverse gates, draws the before-and-after circuits, and verifies the complete circuit operation. It is a compact quantum computing project with a command-line tool and an interactive Jupyter notebook.
 
 The core uses only Python's standard library. No dataset, API key, cloud account, or quantum hardware is required.
-
-![CircuitTrim reducing a 12-gate circuit to 2 gates](docs/images/comparison.png)
 
 ## Demo
 
@@ -102,42 +100,6 @@ CZ and SWAP are symmetric, so reversing their listed wires does not change the g
 
 **Bit order:** q0 is the least significant bit. `X 0` on a three-qubit all-zero state produces `001`. Diagrams show q0 at the top; probability labels read q(n−1)…q0.
 
-## Command-line examples
-
-```bash
-# Running a cascading cancellation
-python -m circuittrim --text "H 0; X 0; X 0; H 0" --qubits 1
-
-# Saving diagrams and reports
-python -m circuittrim examples/bell.ct --qubits 2 --report reports/bell.html --svg reports/bell.svg --json reports/bell.json
-
-# Trying a three-qubit example
-python -m circuittrim examples/three_qubits.ct --qubits 3
-
-# Showing available options
-python -m circuittrim --help
-```
-
-Output folders are created when needed. Existing output files are replaced, but an output cannot overwrite the input circuit file. Every output format needs its own path. Exit codes are `0` for verified success, `1` for a failed equivalence check, and `2` for invalid input or a file error.
-
-You can also install the command with `python -m pip install .`, then use `circuittrim` instead of `python -m circuittrim`.
-
-## Python API
-
-```python
-from circuittrim import parse_circuit, simplify, verify
-
-original = parse_circuit("H 0; X 0; X 0; H 0", n_qubits=1)
-result = simplify(original)
-check = verify(original, result.simplified)
-
-print(result.removed)                 # 4
-print(result.simplified.to_text())     # Empty: the identity circuit
-print(check.equivalent)               # True
-```
-
-`evolve(circuit, state)` accepts a normalized complex state vector. `statevector(circuit, basis=0)` starts from a computational basis input. `probabilities(circuit)` returns calculated probabilities from the all-zero input by default.
-
 ## Why verification matters
 
 A probability chart alone does not prove two circuits are equivalent. For example, applying Z to `|0⟩` and doing nothing produce the same measurement probabilities, but the operations differ on other inputs.
@@ -145,47 +107,6 @@ A probability chart alone does not prove two circuits are equivalent. For exampl
 CircuitTrim compares complex output amplitudes for **every computational basis input**. These outputs form the columns of the operator, so checking them checks its action on any input superposition. The comparison uses a tolerance of `1e-9` and includes phase. It is deliberately stricter than equivalence up to a global phase.
 
 The simplifier itself is a stack-based pass: each gate is pushed once and popped at most once. See [ALGORITHM.md](docs/ALGORITHM.md) for a worked example and the exact scope.
-
-## Tests
-
-From the project folder:
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-The core and export tests need no extra dependencies. Installing the notebook extra also enables the five widget tests. The suite includes:
-
-- Known gate matrices, Bell and GHZ states, and control/target direction.
-- All supported inverse pairs on every valid wire combination for 1–4 qubits.
-- An independent reference calculation for individual gate operations.
-- **500 seeded randomized circuits**, checking equivalence and idempotence.
-- Parsing errors, empty circuits, size limits, phase differences, exports, and paths containing spaces.
-- Notebook controls, invalid input recovery, and stale-result handling.
-
-For the notebook execution check:
-
-```bash
-python -m pip install -e ".[notebook,dev]"
-python scripts/check_notebook.py
-```
-
-A GitHub Actions workflow is included for Windows, macOS, and Linux on Python 3.10, 3.12, and 3.13. Those jobs run after you upload the repository; their inclusion does not mean they have already run. Actual local results and their limits are recorded in [TESTING.md](docs/TESTING.md).
-
-## Project files
-
-| Path | Purpose |
-|---|---|
-| `circuittrim/core.py` | Circuit model, parser, simplifier, simulator, and verifier |
-| `circuittrim/render.py` | SVG, HTML, and JSON exports |
-| `circuittrim/workbench.py` | Interactive notebook controls |
-| `circuittrim/cli.py` | Command-line interface |
-| `notebooks/CircuitTrim.ipynb` | Runnable walkthrough and interactive demo |
-| `examples/` | Four editable circuit files |
-| `tests/` | Core, export, command-line, and widget tests |
-| `docs/images/` | Included diagrams and animated walkthrough |
-| `scripts/` | Notebook validation and reproducible demo generation |
-| `.github/workflows/tests.yml` | Cross-platform checks for GitHub Actions |
 
 ## Scope
 
@@ -195,23 +116,6 @@ A GitHub Actions workflow is included for Windows, macOS, and Linux on Python 3.
 - This version does not include measurement instructions, reset, classical conditions, noise, or hardware execution.
 - Gate count reduction is not a measurement of hardware speed or fidelity.
 - The result is not guaranteed to be the globally smallest circuit.
-
-## Rebuild the demo images
-
-The original SVG, PNG, and GIF assets are included. To regenerate them:
-
-```bash
-python -m pip install -e ".[dev]"
-python scripts/make_demo.py
-```
-
-CairoSVG may need the Cairo system library, particularly on Windows. This dependency is only for rebuilding PNG/GIF assets; normal use, SVG export, and the notebook do not require it.
-
-## Upload to GitHub
-
-Create an empty repository named `circuittrim` (or your preferred name). Upload the **contents of the extracted project folder**, including `README.md`, `LICENSE`, and `.github/`. Do not upload just the ZIP. Alternatively, initialize Git locally and push to your own repository URL.
-
-The relative image links and notebook preview will work after upload. No account-specific URLs are hardcoded.
 
 ## References
 
